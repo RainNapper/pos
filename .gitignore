@@ -1,0 +1,20 @@
+# Directories throughout repo
+node_modules/
+
+# Always include markdown files
+!*.md
+
+# Ignored extensions
+*.log
+*.bin
+*.exe
+*.out
+*.o
+*.png
+*.jpg
+*.bmp
+*.gif
+
+# autogen files
+*.DS_Store #macOS
+*.swp #ViM

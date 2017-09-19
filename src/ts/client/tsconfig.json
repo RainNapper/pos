@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "sourceMap": true,
+        "strictNullChecks": true,
+        "target": "es6",
+        "typeRoots": ["node_modules/@types"],
+        "baseUrl": ".", // This must be specified if "paths" is.
+        "paths": {
+            "redux": ["node_modules/redux/index"],
+            "redux-thunk": ["node_modules/redux-thunk/index"],
+            // Make paths relative to parent directory
+            "client/": ["."],
+            // External dependencies
+            "shared/": ["../shared"]
+        }
+    }
+}
