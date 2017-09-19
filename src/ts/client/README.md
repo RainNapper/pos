@@ -1,10 +1,18 @@
-Client app code. Code that is running on client devices
+#Client app code
+Code that is running on client devices
 
-Run app, from directory with package.json:
+##Run app
+From directory with package.json:
+```
 electron .
+```
 
-Compile code:
+##Compile code and bundle (and babel and maybe other stuff)
+```
 grunt webpack
+```
 
-Lint:
+##Lint
+```
 grunt tslint
+```
