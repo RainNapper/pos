@@ -1,6 +1,8 @@
 export interface IPathContent {
   name: string;
-  targets: ITarget[];
+  items: ITarget[];
+  bundles: ITarget[];
+  categories: ITarget[];
 }
 
 export interface ITarget {

@@ -1023,20 +1023,28 @@ const rootReducer = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_redux__["c
 
 
 class App extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
-    onPathClick(clickedIdx) {
-        console.log(`Clicked on path element ${this.props.path[clickedIdx].name}`);
-        const stepsBack = this.props.path.length - clickedIdx - 1;
-        if (stepsBack > 0) {
-            this.props.navigateBack(stepsBack);
-        }
-    }
-    onTargetClick(target) {
-        console.log(`Clicked on target ${target.name} with id ${target.id}`);
-        this.props.navigate(target.id);
+    constructor() {
+        super(...arguments);
+        this.onPathClick = (clickedIdx) => {
+            console.log(`Clicked on path element ${this.props.path[clickedIdx].name}`);
+            const stepsBack = this.props.path.length - clickedIdx - 1;
+            if (stepsBack > 0) {
+                this.props.navigateBack(stepsBack);
+            }
+        };
+        this.onTargetClick = (target) => {
+            console.log(`Clicked on target ${target.name} with id ${target.id}`);
+            this.props.navigate(target.id);
+        };
+        this.convertTargetToDiv = (target) => {
+            return __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { key: target.id, onClick: () => this.onTargetClick(target) }, target.name);
+        };
     }
     render() {
         const pathDivs = this.props.path.map((pathTarget, idx) => __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { key: pathTarget.id, onClick: () => this.onPathClick(idx) }, pathTarget.name));
-        const targetDivs = this.props.pathContent.targets.map((target) => __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { key: target.id, onClick: () => this.onTargetClick(target) }, target.name));
+        const categoryDivs = this.props.pathContent.categories.map(this.convertTargetToDiv);
+        const itemDivs = this.props.pathContent.items.map(this.convertTargetToDiv);
+        const bundleDivs = this.props.pathContent.bundles.map(this.convertTargetToDiv);
         return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", null,
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h1", null,
                 "Hello, ",
@@ -1048,8 +1056,14 @@ class App extends __WEBPACK_IMPORTED_MODULE_0_react__["Component"] {
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h2", null, "Path"),
                 pathDivs),
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", null,
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h2", null, "Sub-categories"),
+                categoryDivs),
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", null,
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h2", null, "Contents"),
-                targetDivs)));
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h3", null, "Items"),
+                itemDivs,
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h3", null, "Bundles"),
+                bundleDivs)));
     }
 }
 const mapStateToProps = (state) => {
@@ -1108,7 +1122,7 @@ __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_react_dom__["render"])(__WEBPA
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions_actions__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_client_app_store_actions_actions__ = __webpack_require__(8);
 
 const navigate = (dispatch) => (target) => {
     dispatch(buildNavigateAction(target));
@@ -1122,13 +1136,13 @@ const navigateBack = (dispatch) => (stepsBack) => {
 
 const buildNavigateAction = (target) => {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_0__actions_actions__["a" /* NAVIGATE */],
+        type: __WEBPACK_IMPORTED_MODULE_0_client_app_store_actions_actions__["a" /* NAVIGATE */],
         target
     };
 };
 const buildNavigateBackAction = (stepsBack) => {
     return {
-        type: __WEBPACK_IMPORTED_MODULE_0__actions_actions__["b" /* NAVIGATE_BACK */],
+        type: __WEBPACK_IMPORTED_MODULE_0_client_app_store_actions_actions__["b" /* NAVIGATE_BACK */],
         stepsBack,
     };
 };
@@ -1139,7 +1153,7 @@ const buildNavigateBackAction = (stepsBack) => {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions_actions__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_client_app_store_actions_actions__ = __webpack_require__(8);
 
 const DEFAULT_STATE = {
     selectedId: undefined,
@@ -1147,9 +1161,9 @@ const DEFAULT_STATE = {
 };
 const browseReducer = (state = DEFAULT_STATE, action) => {
     switch (action.type) {
-        case __WEBPACK_IMPORTED_MODULE_0__actions_actions__["a" /* NAVIGATE */]:
+        case __WEBPACK_IMPORTED_MODULE_0_client_app_store_actions_actions__["a" /* NAVIGATE */]:
             return Object.assign({}, state, { path: [...state.path, action.target] });
-        case __WEBPACK_IMPORTED_MODULE_0__actions_actions__["b" /* NAVIGATE_BACK */]:
+        case __WEBPACK_IMPORTED_MODULE_0_client_app_store_actions_actions__["b" /* NAVIGATE_BACK */]:
             return Object.assign({}, state, { path: state.path.slice(0, state.path.length - action.stepsBack) });
         default:
             return state;
@@ -1175,7 +1189,8 @@ const menuReducer = (state = DEFAULT_STATE, action) => {
 function buildMenu() {
     return {
         layout: buildLayout(),
-        items: new Map(),
+        categories: buildCategories(),
+        items: buildItems(),
         itemGroups: new Map(),
         bundles: new Map(),
         bundleTemplates: new Map(),
@@ -1189,31 +1204,63 @@ function buildLayout() {
         edges: new Map([
             ['1', ['2', '3']],
             ['2', ['4', '5']],
-            ['3', []]
+            ['3', []],
+            ['4', []],
+            ['5', []],
         ]),
         vertices: new Map([
-            ['1', {
-                    id: '1',
-                    name: 'Root'
-                }],
-            ['2', {
-                    id: '2',
-                    name: 'Entrees'
-                }],
-            ['3', {
-                    id: '3',
-                    name: 'Appetizers'
-                }],
+            ['1', { id: '1', }],
+            ['2', { id: '2', }],
+            ['3', { id: '3', }],
             ['4', {
                     id: '4',
-                    name: 'Chicken'
+                    data: {
+                        itemIds: ['i1', 'i2'],
+                        bundleIds: [],
+                    }
                 }],
             ['5', {
                     id: '5',
-                    name: 'Seafood'
+                    data: {
+                        itemIds: ['i3', 'i4'],
+                        bundleIds: [],
+                    }
                 }]
         ]),
     };
+}
+function buildCategories() {
+    return new Map([
+        ['1', "Root"],
+        ['2', "Entrees"],
+        ['3', "Appetizers"],
+        ['4', "Chicken"],
+        ['5', "Seafood"],
+    ]);
+}
+function buildItems() {
+    return new Map([
+        ['i1', {
+                id: 'i1',
+                name: 'Chicken Parmagiana',
+                optionGroupIds: [],
+            }],
+        ['i2', {
+                id: 'i2',
+                name: 'Chicken Masala',
+                optionGroupIds: [],
+            }],
+        ['i3', {
+                id: 'i3',
+                name: 'Swordfish',
+                optionGroupIds: [],
+            }],
+        ['i4', {
+                id: 'i4',
+                name: 'Salmon Steak',
+                optionGroupIds: [],
+            }],
+    ]);
 }
 
 
@@ -1241,25 +1288,19 @@ const nameReducer = (state = DEFAULT_STATE, action) => {
 
 "use strict";
 const getCurrentPathTargets = (state) => {
-    if (state.browse === undefined) {
-        throw "Browse state in undefined?!";
-    }
-    if (state.menu === undefined) {
-        throw "Menu state is undefined?!";
-    }
     const currentPath = state.browse.path;
-    return currentPath.map((id) => buildTargetFromTreeNode(state.menu.layout.vertices.get(id)));
+    return currentPath.map((id) => {
+        return {
+            id: id,
+            name: state.menu.categories.get(id),
+        };
+    });
 };
 /* harmony export (immutable) */ __webpack_exports__["a"] = getCurrentPathTargets;
 
 const getPathContents = (state) => {
-    if (state.browse === undefined) {
-        throw "Browse state is undefined?!";
-    }
-    if (state.menu === undefined) {
-        throw "Menu state is undefined?!";
-    }
-    const menuLayout = state.menu.layout;
+    const menu = state.menu;
+    const menuLayout = menu.layout;
     const path = state.browse.path;
     const current = path[path.length - 1];
     const currentNode = menuLayout.vertices.get(current);
@@ -1267,18 +1308,28 @@ const getPathContents = (state) => {
         throw "Current category doesn't exist?!";
     }
     const children = menuLayout.edges.get(current);
-    if (children === undefined) {
-        throw "Current category doesn't have children?!";
+    const categories = children.map((nodeId) => {
+        return {
+            id: nodeId,
+            name: menu.categories.get(nodeId),
+        };
+    });
+    var items = [];
+    var bundles = [];
+    if (currentNode.data !== undefined) {
+        items = currentNode.data.itemIds.map((itemId) => buildTargetFromMenuElement(state.menu.items.get(itemId)));
+        bundles = currentNode.data.bundleIds.map((bundleId) => buildTargetFromMenuElement(state.menu.bundles.get(bundleId)));
     }
-    const targets = children.map((nodeId) => buildTargetFromTreeNode(menuLayout.vertices.get(nodeId)));
     return {
-        name: currentNode.name,
-        targets
+        name: menu.categories.get(currentNode.id),
+        categories,
+        items,
+        bundles
     };
 };
 /* harmony export (immutable) */ __webpack_exports__["b"] = getPathContents;
 
-const buildTargetFromTreeNode = (node) => {
+const buildTargetFromMenuElement = (node) => {
     return {
         id: node.id,
         name: node.name,

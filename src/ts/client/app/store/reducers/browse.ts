@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { AppAction, NAVIGATE, NAVIGATE_BACK } from '../actions/actions';
+import { AppAction, NAVIGATE, NAVIGATE_BACK } from 'client/app/store/actions/actions';
 
 export interface IBrowseStoreState {
   selectedId?: string;

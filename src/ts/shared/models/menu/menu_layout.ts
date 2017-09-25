@@ -1,3 +1,5 @@
+// Assert that key set of edges and vertices are identical
+// Assert that rootNodeId is in keyset of both edges and vertices.
 export interface IMenuLayout {
   rootNodeId: string;
   edges: Map<string, string[]>;
@@ -6,7 +8,6 @@ export interface IMenuLayout {
 
 export interface IMenuTreeNode {
   id: string;
-  name: string;
   data?: IMenuTreeData;
 }
 

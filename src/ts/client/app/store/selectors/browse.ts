@@ -1,50 +1,53 @@
 import { IRootStoreState } from 'client/app/store/reducers/root';
 import { ITarget, IPathContent } from 'client/app/ui/models/path_content';
 import { IMenuTreeNode } from 'shared/models/menu/menu_layout';
+import { ICategory, IBundle, IItem } from 'shared/models/menu/menu_elements';
 
 export const getCurrentPathTargets = (state: IRootStoreState): ITarget[] => {
-  if (state.browse === undefined) {
-    throw "Browse state in undefined?!";
-  }
-  if (state.menu === undefined) {
-    throw "Menu state is undefined?!";
-  }
-
   const currentPath = state.browse.path;
-  return currentPath.map((id) => buildTargetFromTreeNode(state.menu.layout.vertices.get(id)!));
+  return currentPath.map((id) => {
+    return {
+      id: id,
+      name: state.menu.categories.get(id)!,
+    }
+  })
 }
 
 export const getPathContents = (state: IRootStoreState): IPathContent => {
-  if (state.browse === undefined) {
-    throw "Browse state is undefined?!";
-  }
-  if (state.menu === undefined) {
-    throw "Menu state is undefined?!";
-  }
-  const menuLayout = state.menu.layout;
-
+  const menu = state.menu;
+  const menuLayout = menu.layout;
   const path = state.browse.path;
   const current = path[path.length - 1];
   const currentNode = menuLayout.vertices.get(current);
   if (currentNode === undefined) {
     throw "Current category doesn't exist?!";
   }
-
-  const children = menuLayout.edges.get(current);
-  if (children === undefined) {
-    throw "Current category doesn't have children?!";
-  }
+  const children = menuLayout.edges.get(current)!;
   
-  const targets = children.map(
-    (nodeId) => buildTargetFromTreeNode(menuLayout.vertices.get(nodeId)!));
+  const categories: ITarget[] = children.map(
+    (nodeId) => {
+      return {
+        id: nodeId,
+        name: menu.categories.get(nodeId)!,
+      };
+    });
+
+  var items: ITarget[] = [];
+  var bundles: ITarget[] = [];
+  if (currentNode.data !== undefined) {
+    items = currentNode.data.itemIds.map((itemId) => buildTargetFromMenuElement(state.menu.items.get(itemId)!));
+    bundles = currentNode.data.bundleIds.map((bundleId) => buildTargetFromMenuElement(state.menu.bundles.get(bundleId)!));
+  }
 
   return {
-    name: currentNode.name,
-    targets
+    name: menu.categories.get(currentNode.id)!,
+    categories,
+    items,
+    bundles
   };
 }
 
-const buildTargetFromTreeNode = (node: IMenuTreeNode): ITarget => {
+const buildTargetFromMenuElement = (node: IItem | IBundle): ITarget => {
   return {
     id: node.id,
     name: node.name,

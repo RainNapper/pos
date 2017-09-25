@@ -6,27 +6,14 @@ import { IPathContent, ITarget } from "app/ui/models/path_content";
 import { getPathContents, getCurrentPathTargets } from "app/store/selectors/browse";
 
 class App extends React.Component<IAppProps, IAppState>  {
-  onPathClick(clickedIdx: number) {
-    console.log(`Clicked on path element ${this.props.path[clickedIdx].name}`);
-    const stepsBack = this.props.path.length - clickedIdx - 1;
-    if (stepsBack > 0) {
-      this.props.navigateBack(stepsBack);
-    }
-  }
-
-  onTargetClick(target: ITarget) {
-    console.log(`Clicked on target ${target.name} with id ${target.id}`);
-    this.props.navigate(target.id);
-  }
-
   render() {
     const pathDivs = this.props.path.map(
       (pathTarget, idx) => <div key={pathTarget.id} onClick={() => this.onPathClick(idx)}>{pathTarget.name}</div>
     )
 
-    const targetDivs = this.props.pathContent.targets.map(
-      (target) => <div key={target.id} onClick={() => this.onTargetClick(target)}>{target.name}</div>
-    )
+    const categoryDivs = this.props.pathContent.categories.map(this.convertTargetToDiv);
+    const itemDivs = this.props.pathContent.items.map(this.convertTargetToDiv);
+    const bundleDivs = this.props.pathContent.bundles.map(this.convertTargetToDiv);
 
     return (
       <div>
@@ -37,13 +24,38 @@ class App extends React.Component<IAppProps, IAppState>  {
           {pathDivs}
         </div>
         <div>
+          <h2>Sub-categories</h2>
+          {categoryDivs}
+        </div>
+        <div>
           <h2>Contents</h2>
-          {targetDivs}
+          <h3>Items</h3>
+          {itemDivs}
+          <h3>Bundles</h3>
+          {bundleDivs}
         </div>
       </div>
     );
   }
+
+  private onPathClick = (clickedIdx: number) => {
+    console.log(`Clicked on path element ${this.props.path[clickedIdx].name}`);
+    const stepsBack = this.props.path.length - clickedIdx - 1;
+    if (stepsBack > 0) {
+      this.props.navigateBack(stepsBack);
+    }
+  }
+
+  private onTargetClick = (target: ITarget) => {
+    console.log(`Clicked on target ${target.name} with id ${target.id}`);
+    this.props.navigate(target.id);
+  }
+
+  private convertTargetToDiv = (target: ITarget): JSX.Element => {
+    return <div key={target.id} onClick={() => this.onTargetClick(target)}>{target.name}</div>;
+  }
 }
+
 
 type IAppStateProps = {
   name: string;

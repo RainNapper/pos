@@ -1,5 +1,5 @@
 import { Action } from 'redux';
-import { IBrowseStoreState } from "../reducers/browse";
+import { IBrowseStoreState } from "client/app/store/reducers/browse";
 
 export type AppAction =
   NavigateAction |

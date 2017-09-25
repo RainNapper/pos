@@ -1,11 +1,10 @@
 import { IMenuLayout } from './menu_layout';
-import { IItem, IItemGroup } from './item';
-import { IBundle, IBundleTemplate } from './bundle';
-import { IOption, IOptionGroup } from './option';
+import { IItem, IItemGroup, IBundle, IBundleTemplate, IOption, IOptionGroup, ICategory } from './menu_elements';
 
 export interface IMenu {
   layout: IMenuLayout;
-  items: Map<string, IItem>
+  categories: Map<string, ICategory>;
+  items: Map<string, IItem>;
   itemGroups: Map<string, IItemGroup>;
   bundles: Map<string, IBundle>;
   bundleTemplates: Map<string, IBundleTemplate>;

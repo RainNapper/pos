@@ -1,6 +1,6 @@
 import { Action, Dispatch } from 'redux';
-import { NAVIGATE, NAVIGATE_BACK, NavigateAction, NavigateBackAction } from "../actions/actions";
-import { IRootStoreState } from "../reducers/root";
+import { NAVIGATE, NAVIGATE_BACK, NavigateAction, NavigateBackAction } from "client/app/store/actions/actions";
+import { IRootStoreState } from "client/app/store/reducers/root";
 
 export const navigate = (dispatch: Dispatch<IRootStoreState>) => (target: string): void => {
   dispatch(buildNavigateAction(target));
