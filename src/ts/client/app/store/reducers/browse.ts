@@ -1,5 +1,5 @@
-import { Reducer } from 'redux';
-import { AppAction, NAVIGATE, NAVIGATE_BACK } from 'client/app/store/actions/actions';
+import { AppAction, NAVIGATE, NAVIGATE_BACK } from "client/app/store/actions/actions";
+import { Reducer } from "redux";
 
 export interface IBrowseStoreState {
   selectedId?: string;
@@ -8,8 +8,8 @@ export interface IBrowseStoreState {
 
 const DEFAULT_STATE: IBrowseStoreState = {
   selectedId: undefined,
-  path: ['1']
-}
+  path: ["1"],
+};
 
 export const browseReducer: Reducer<IBrowseStoreState> = (
   state: IBrowseStoreState = DEFAULT_STATE,
@@ -18,14 +18,14 @@ export const browseReducer: Reducer<IBrowseStoreState> = (
     case NAVIGATE:
       return {
         ...state,
-        path: [...state.path, action.target]
+        path: [...state.path, action.target],
       };
     case NAVIGATE_BACK:
       return {
         ...state,
-        path: state.path.slice(0, state.path.length - action.stepsBack)
-      }
+        path: state.path.slice(0, state.path.length - action.stepsBack),
+      };
     default:
       return state;
   }
-}
+};

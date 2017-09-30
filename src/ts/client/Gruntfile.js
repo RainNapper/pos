@@ -32,11 +32,15 @@ module.exports = function (grunt) {
                 plugins: [
                     // Uglify?
                     //new webpack.optimize.UglifyJsPlugin(),
-                ]
-            }
-        }
+                ],
+            },
+        },
+        exec: {
+            electron: 'npm-run electron .'
+        },
     });
 
     grunt.loadNpmTasks('grunt-tslint');
-    grunt.loadNpmTasks('grunt-webpack')
+    grunt.loadNpmTasks('grunt-webpack');
+    grunt.loadNpmTasks('grunt-exec');
 };

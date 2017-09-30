@@ -1,6 +1,7 @@
-const {app, BrowserWindow} = require('electron')
-const path = require('path')
-const url = require('url')
+const {app, BrowserWindow} = require('electron');
+const path = require('path');
+const url = require('url');
+const fs = require('fs');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -34,7 +35,9 @@ function createWindow () {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   const reactDevToolsPath = "/Users/mansfield/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.1_0";
-  BrowserWindow.addDevToolsExtension(reactDevToolsPath);
+  if (fs.existsSync(reactDevToolsPath)) {
+    BrowserWindow.addDevToolsExtension(reactDevToolsPath);
+  }
   createWindow();
 });
 

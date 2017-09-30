@@ -1,7 +1,7 @@
-import { combineReducers, Reducer } from 'redux';
-import { nameReducer, INameStoreState } from 'client/app/store/reducers/name';
 import { browseReducer, IBrowseStoreState } from "client/app/store/reducers/browse";
-import { menuReducer, IMenuStoreState } from "client/app/store/reducers/menu";
+import { IMenuStoreState, menuReducer } from "client/app/store/reducers/menu";
+import { INameStoreState, nameReducer } from "client/app/store/reducers/name";
+import { combineReducers, Reducer } from "redux";
 
 export interface IRootStoreState {
   // user?: IUserState;

@@ -1,15 +1,15 @@
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { IRootStoreState } from 'client/app/store/reducers/root';
-import { navigate, navigateBack } from 'client/app/store/actions/browse';
+import { getCurrentPathTargets, getPathContents } from "app/store/selectors/browse";
 import { IPathContent, ITarget } from "app/ui/models/path_content";
-import { getPathContents, getCurrentPathTargets } from "app/store/selectors/browse";
+import { navigate, navigateBack } from "client/app/store/actions/browse";
+import { IRootStoreState } from "client/app/store/reducers/root";
+import * as React from "react";
+import { connect } from "react-redux";
 
 class App extends React.Component<IAppProps, IAppState>  {
-  render() {
+  public render() {
     const pathDivs = this.props.path.map(
-      (pathTarget, idx) => <div key={pathTarget.id} onClick={() => this.onPathClick(idx)}>{pathTarget.name}</div>
-    )
+      (pathTarget, idx) => <div key={pathTarget.id} onClick={() => this.onPathClick(idx)}>{pathTarget.name}</div>,
+    );
 
     const categoryDivs = this.props.pathContent.categories.map(this.convertTargetToDiv);
     const itemDivs = this.props.pathContent.items.map(this.convertTargetToDiv);
@@ -56,33 +56,32 @@ class App extends React.Component<IAppProps, IAppState>  {
   }
 }
 
-
-type IAppStateProps = {
+interface IAppStateProps {
   name: string;
   path: ITarget[];
   pathContent: IPathContent;
-};
+}
 
-type IAppDispatchProps = {
+interface IAppDispatchProps {
   navigate: (string) => void;
   navigateBack: (number) => void;
 }
 type IAppProps = IAppStateProps & IAppDispatchProps;
-type IAppState = {};
+interface IAppState {}
 
 const mapStateToProps = (state: IRootStoreState): IAppStateProps => {
   return {
     name: state.name.name,
     path: getCurrentPathTargets(state),
     pathContent: getPathContents(state),
-  }
+  };
 };
 
 const mapDispatchToProps = (dispatch): IAppDispatchProps => {
   return {
     navigate: navigate(dispatch),
     navigateBack: navigateBack(dispatch),
-  }
+  };
 };
 
 export const AppContainer = connect<IAppStateProps, IAppDispatchProps, any>(mapStateToProps, mapDispatchToProps)(App);
