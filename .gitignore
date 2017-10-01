@@ -1,5 +1,6 @@
 # Directories throughout repo
 node_modules/
+build/
 
 # Always include markdown files
 !*.md

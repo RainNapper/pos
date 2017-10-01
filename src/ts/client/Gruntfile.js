@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var webpack_config_builder = require('./webpack.config.js');
 
 const ALL_TS_EXCLUDE_NODE_MODULES = [
     '**/*.ts',
@@ -20,20 +21,9 @@ module.exports = function (grunt) {
             },
         },
         webpack: {
-            options: require('./webpack.config.js'),
-
-            prod: {
-//                  "compilerOptions": {
-//                    "noImplicitAny": true,
-//                    "noUnusedLocals": true,
-//                    "noUnusedParameters": true,
-//                    "removeComments": true
-//                },
-                plugins: [
-                    // Uglify?
-                    //new webpack.optimize.UglifyJsPlugin(),
-                ],
-            },
+            dev: webpack_config_builder(false, false),
+            dev_with_externals: webpack_config_builder(true, false),
+            prod: webpack_config_builder(true, true),
         },
         exec: {
             electron: 'npm-run electron .'
