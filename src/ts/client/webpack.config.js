@@ -10,7 +10,7 @@ const EXTERNALS = {
     "react": "React",
     "react-dom": "ReactDOM",
     "redux": "Redux",
-    "react-redux": "React Redux",
+    "react-redux": "ReactRedux",
 }
 
 module.exports = function (with_externals, prod) {

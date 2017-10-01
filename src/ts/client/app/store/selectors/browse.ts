@@ -13,7 +13,7 @@ export const getCurrentPathTargets = (state: IRootStoreState): ITarget[] => {
   });
 };
 
-export const getPathContents = (state: IRootStoreState): IPathContent => {
+export const getCategoryContents = (state: IRootStoreState): IPathContent => {
   const menu = state.menu;
   const menuLayout = menu.layout;
   const path = state.browse.path;

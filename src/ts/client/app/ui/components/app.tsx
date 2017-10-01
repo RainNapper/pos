@@ -1,4 +1,4 @@
-import { getCurrentPathTargets, getPathContents } from "app/store/selectors/browse";
+import { getCurrentPathTargets, getCategoryContents } from "app/store/selectors/browse";
 import { IPathContent, ITarget } from "app/ui/models/path_content";
 import { navigate, navigateBack } from "client/app/store/actions/browse";
 import { IRootStoreState } from "client/app/store/reducers/root";
@@ -7,18 +7,15 @@ import { connect } from "react-redux";
 
 class App extends React.Component<IAppProps, IAppState>  {
   public render() {
-    const pathDivs = this.props.path.map(
-      (pathTarget, idx) => <div key={pathTarget.id} onClick={() => this.onPathClick(idx)}>{pathTarget.name}</div>,
-    );
-
-    const categoryDivs = this.props.pathContent.categories.map(this.convertTargetToDiv);
-    const itemDivs = this.props.pathContent.items.map(this.convertTargetToDiv);
-    const bundleDivs = this.props.pathContent.bundles.map(this.convertTargetToDiv);
+    const pathDivs = this.props.path.map(this.convertTargetToDiv(this.onCategoryClick));
+    const categoryDivs = this.props.categoryContents.categories.map(this.convertTargetToDiv(this.onCategoryClick));
+    const itemDivs = this.props.categoryContents.items.map(this.convertTargetToDiv(this.onItemClick));
+    const bundleDivs = this.props.categoryContents.bundles.map(this.convertTargetToDiv(this.onBundleClick));
 
     return (
       <div>
         <h1>Hello, {this.props.name}</h1>
-        <h2>Currently at category {this.props.pathContent.name}</h2>
+        <h2>Currently at category {this.props.categoryContents.name}</h2>
         <div>
           <h2>Path</h2>
           {pathDivs}
@@ -38,7 +35,7 @@ class App extends React.Component<IAppProps, IAppState>  {
     );
   }
 
-  private onPathClick = (clickedIdx: number) => {
+  private onCurrentPathClick = (clickedIdx: number) => {
     console.log(`Clicked on path element ${this.props.path[clickedIdx].name}`);
     const stepsBack = this.props.path.length - clickedIdx - 1;
     if (stepsBack > 0) {
@@ -46,20 +43,36 @@ class App extends React.Component<IAppProps, IAppState>  {
     }
   }
 
-  private onTargetClick = (target: ITarget) => {
+  private onCategoryClick = (target: ITarget) => {
     console.log(`Clicked on target ${target.name} with id ${target.id}`);
+    this.props.path.forEach((pathTarget, idx) => {
+      if (target.id == pathTarget.id) {
+        var stepsBack = this.props.path.length - idx;
+        console.log(`Clicked target detected as part of path, going ${stepsBack} steps back.`); 
+        this.props.navigateBack(stepsBack);
+        return;
+      }
+    });
     this.props.navigate(target.id);
   }
 
-  private convertTargetToDiv = (target: ITarget): JSX.Element => {
-    return <div key={target.id} onClick={() => this.onTargetClick(target)}>{target.name}</div>;
+  private onItemClick = (target: ITarget) => {
+    console.log(`Clicked on item ${target.name} with id ${target.id}`);
+  }
+  
+  private onBundleClick = (target: ITarget) => {
+    console.log(`Clicked on bundle ${target.name} with id ${target.id}`);
+  }
+
+  private convertTargetToDiv = (onTargetClick) => (target: ITarget): JSX.Element => {
+    return <div key={target.id} onClick={() => onTargetClick(target)}>{target.name}</div>;
   }
 }
 
 interface IAppStateProps {
   name: string;
   path: ITarget[];
-  pathContent: IPathContent;
+  categoryContents: IPathContent;
 }
 
 interface IAppDispatchProps {
@@ -73,7 +86,7 @@ const mapStateToProps = (state: IRootStoreState): IAppStateProps => {
   return {
     name: state.name.name,
     path: getCurrentPathTargets(state),
-    pathContent: getPathContents(state),
+    categoryContents: getCategoryContents(state),
   };
 };
 
