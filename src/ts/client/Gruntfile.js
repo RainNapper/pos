@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var webpackConfigBuilder = require('./webpack.config.js');
+var vendorWebpackConfig = require('./webpack.config.vendor');
 
 const ALL_TS_EXCLUDE_NODE_MODULES = [
     '**/*.ts',
@@ -21,8 +22,9 @@ module.exports = function (grunt) {
             },
         },
         webpack: {
-            dev: webpackConfigBuilder(grunt.option('with_externals'), false),
-            prod: webpackConfigBuilder(true, true),
+            dev: webpackConfigBuilder(false),
+            vendor: vendorWebpackConfig,
+            prod: webpackConfigBuilder(true),
         },
         exec: {
             electron: 'npm-run electron .'

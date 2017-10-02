@@ -6,21 +6,22 @@ const path = require('path');
 // after https://github.com/webpack/webpack/issues/3460 will be resolved.
 const { CheckerPlugin } = require('awesome-typescript-loader')
 
+const BUILD_ROOT = __dirname + "/dist/build/";
 const EXTERNALS = {
-    "react": "React",
-    "react-dom": "ReactDOM",
-    "redux": "Redux",
-    "react-redux": "ReactRedux",
+    "react": "react",
+    "react-dom": "react-dom",
+    "redux": "redux",
+    "react-redux": "react-redux",
 }
 
-module.exports = function (withExternals, prod) {
+module.exports = function (prod) {
   var config = {
     entry: {
       app: "./app/index.tsx",
     },
     output: {
-      filename: "bundle.js",
-      path: __dirname + "/dist/build/"
+      filename: "app.bundle.js",
+      path: BUILD_ROOT
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -57,22 +58,12 @@ module.exports = function (withExternals, prod) {
     },
     plugins: [
       new CheckerPlugin(),
-
+      new webpack.DllReferencePlugin({
+        context: ".",
+        manifest: require(`${BUILD_ROOT}vendor-manifest.json`)
+      })
     ],
   };
-
-  if (withExternals) {
-    // Include externals as a separate bundle.
-    config.entry.externals = Object.keys(EXTERNALS);
-    config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
-      name: "externals",
-      filename: "externals.js",
-      minChunks: Infinity,
-    }));
-  } else {
-    // Instruct webpack to ignore externals.
-    config.externals = EXTERNALS;
-  }
 
   if (prod) {
     // Do stuff like minify
