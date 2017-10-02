@@ -8,10 +8,5 @@ export interface IMenuLayout {
 
 export interface IMenuTreeNode {
   id: string;
-  data?: IMenuTreeData;
-}
-
-export interface IMenuTreeData {
-  itemIds: string[];
-  bundleIds: string[];
+  orderables?: string[];
 }

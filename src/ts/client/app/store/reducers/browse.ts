@@ -1,4 +1,4 @@
-import { AppAction, NAVIGATE, NAVIGATE_BACK } from "client/app/store/actions/actions";
+import { AppAction, NAVIGATE_TO, NAVIGATE_BACK } from "client/app/store/actions/actions";
 import { Reducer } from "redux";
 
 export interface IBrowseStoreState {
@@ -15,7 +15,7 @@ export const browseReducer: Reducer<IBrowseStoreState> = (
   state: IBrowseStoreState = DEFAULT_STATE,
   action: AppAction): IBrowseStoreState => {
   switch (action.type) {
-    case NAVIGATE:
+    case NAVIGATE_TO:
       return {
         ...state,
         path: [...state.path, action.target],

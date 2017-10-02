@@ -1,6 +1,6 @@
 import { Reducer } from "redux";
 
-export interface INameStoreState {
+export interface IUserStoreState {
   name: string;
 }
 
@@ -8,9 +8,9 @@ const DEFAULT_STATE = {
   name: "My One and Only",
 };
 
-export const nameReducer: Reducer<INameStoreState> = (
-    state: INameStoreState = DEFAULT_STATE,
-    action): INameStoreState => {
+export const userReducer: Reducer<IUserStoreState> = (
+    state: IUserStoreState = DEFAULT_STATE,
+    action): IUserStoreState => {
   switch (action.type) {
     default:
       return state;

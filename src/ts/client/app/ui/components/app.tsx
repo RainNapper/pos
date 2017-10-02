@@ -1,4 +1,4 @@
-import { getCurrentPathTargets, getCategoryContents } from "app/store/selectors/browse";
+import { getCategoryContents, getCurrentPathTargets } from "app/store/selectors/browse";
 import { IPathContent, ITarget } from "app/ui/models/path_content";
 import { navigate, navigateBack } from "client/app/store/actions/browse";
 import { IRootStoreState } from "client/app/store/reducers/root";
@@ -9,8 +9,7 @@ class App extends React.Component<IAppProps, IAppState>  {
   public render() {
     const pathDivs = this.props.path.map(this.convertTargetToDiv(this.onCategoryClick));
     const categoryDivs = this.props.categoryContents.categories.map(this.convertTargetToDiv(this.onCategoryClick));
-    const itemDivs = this.props.categoryContents.items.map(this.convertTargetToDiv(this.onItemClick));
-    const bundleDivs = this.props.categoryContents.bundles.map(this.convertTargetToDiv(this.onBundleClick));
+    const orderableDivs = this.props.categoryContents.orderables.map(this.convertTargetToDiv(this.onOrderableClick));
 
     return (
       <div>
@@ -26,10 +25,8 @@ class App extends React.Component<IAppProps, IAppState>  {
         </div>
         <div>
           <h2>Contents</h2>
-          <h3>Items</h3>
-          {itemDivs}
-          <h3>Bundles</h3>
-          {bundleDivs}
+          <h3>Orderables</h3>
+          {orderableDivs}
         </div>
       </div>
     );
@@ -47,8 +44,8 @@ class App extends React.Component<IAppProps, IAppState>  {
     console.log(`Clicked on target ${target.name} with id ${target.id}`);
     this.props.path.forEach((pathTarget, idx) => {
       if (target.id == pathTarget.id) {
-        var stepsBack = this.props.path.length - idx;
-        console.log(`Clicked target detected as part of path, going ${stepsBack} steps back.`); 
+        let stepsBack = this.props.path.length - idx;
+        console.log(`Clicked target detected as part of path, going ${stepsBack} steps back.`);
         this.props.navigateBack(stepsBack);
         return;
       }
@@ -56,12 +53,8 @@ class App extends React.Component<IAppProps, IAppState>  {
     this.props.navigate(target.id);
   }
 
-  private onItemClick = (target: ITarget) => {
-    console.log(`Clicked on item ${target.name} with id ${target.id}`);
-  }
-  
-  private onBundleClick = (target: ITarget) => {
-    console.log(`Clicked on bundle ${target.name} with id ${target.id}`);
+  private onOrderableClick = (target: ITarget) => {
+    console.log(`Clicked on orderable ${target.name} with id ${target.id}`);
   }
 
   private convertTargetToDiv = (onTargetClick) => (target: ITarget): JSX.Element => {
@@ -84,7 +77,7 @@ interface IAppState {}
 
 const mapStateToProps = (state: IRootStoreState): IAppStateProps => {
   return {
-    name: state.name.name,
+    name: state.user.name,
     path: getCurrentPathTargets(state),
     categoryContents: getCategoryContents(state),
   };

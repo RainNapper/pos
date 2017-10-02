@@ -1,8 +1,5 @@
-import { IItemSelection, IBundleSelection } from 'selection';
-
-export interface ISession {
+export interface ITable {
   id: string;
   creationTime: Date;
   closeTime?: Date;
-  order: (IItemSelection | IBundleSelection)[];
 }

@@ -13,7 +13,7 @@ const EXTERNALS = {
     "react-redux": "ReactRedux",
 }
 
-module.exports = function (with_externals, prod) {
+module.exports = function (withExternals, prod) {
   var config = {
     entry: {
       app: "./app/index.tsx",
@@ -61,7 +61,7 @@ module.exports = function (with_externals, prod) {
     ],
   };
 
-  if (with_externals) {
+  if (withExternals) {
     // Include externals as a separate bundle.
     config.entry.externals = Object.keys(EXTERNALS);
     config.plugins.push(new webpack.optimize.CommonsChunkPlugin({

@@ -3,7 +3,9 @@ Code that is running on client devices
 
 ## Initial setup  
 Install yarn and grunt globally 
-`npm install -g yarn grunt npm-run`
+`npm install -g yarn grunt npm-run`  
+Install dependencies
+`yarn install`  
 
 ## Run app  
 From directory with package.json  
@@ -13,7 +15,7 @@ From directory with package.json
 `grunt webpack:dev`
 
 ## Compile app as well as external dependencies  
-`grunt webpack:dev_with_externals`
+`grunt webpack:dev --with_externals`
 
 ## Linter  
 `grunt tslint`  

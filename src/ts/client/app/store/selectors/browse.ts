@@ -1,6 +1,6 @@
 import { IRootStoreState } from "client/app/store/reducers/root";
 import { IPathContent, ITarget } from "client/app/ui/models/path_content";
-import { IBundle, ICategory, IItem } from "shared/models/menu/menu_elements";
+import { ICategory, IOrderable } from "shared/models/menu/menu_elements";
 import { IMenuTreeNode } from "shared/models/menu/menu_layout";
 
 export const getCurrentPathTargets = (state: IRootStoreState): ITarget[] => {
@@ -32,24 +32,22 @@ export const getCategoryContents = (state: IRootStoreState): IPathContent => {
       };
     });
 
-  let items: ITarget[] = [];
-  let bundles: ITarget[] = [];
-  if (currentNode.data !== undefined) {
-    items = currentNode.data.itemIds.map((itemId) => buildTargetFromMenuElement(state.menu.items.get(itemId)!));
-    bundles = currentNode.data.bundleIds.map((bundleId) => buildTargetFromMenuElement(state.menu.bundles.get(bundleId)!));
+  // TODO(mansfieldmark): Remove the !, explicitly throw an exception.
+  let orderables: ITarget[] = [];
+  if (currentNode.orderables !== undefined) {
+    orderables = currentNode.orderables.map((orderableId) => buildTargetFromOrderable(state.menu.orderables.get(orderableId)!));
   }
 
   return {
     name: menu.categories.get(currentNode.id)!,
     categories,
-    items,
-    bundles,
+    orderables,
   };
 };
 
-const buildTargetFromMenuElement = (node: IItem | IBundle): ITarget => {
+const buildTargetFromOrderable = (orderable: IOrderable): ITarget => {
   return {
-    id: node.id,
-    name: node.name,
+    id: orderable.id,
+    name: orderable.name,
   };
 };
