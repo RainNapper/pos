@@ -1,11 +1,11 @@
 var webpack = require('webpack');
 var webpackConfigBuilder = require('./webpack.config.js');
-var vendorWebpackConfig = require('./webpack.config.vendor');
+var vendorWebpackConfig = require('./webpack.config.vendor.js');
 
 const ALL_TS_EXCLUDE_NODE_MODULES = [
     '**/*.ts',
     '**/*.tsx',
-    '!node_modules/**'
+    '!node_modules/**',
 ];
 
 module.exports = function (grunt) {
@@ -18,7 +18,7 @@ module.exports = function (grunt) {
                 force: grunt.option('force'),
             },
             all: {
-                src: ALL_TS_EXCLUDE_NODE_MODULES
+                src: ALL_TS_EXCLUDE_NODE_MODULES,
             },
         },
         webpack: {
@@ -27,7 +27,7 @@ module.exports = function (grunt) {
             prod: webpackConfigBuilder(true),
         },
         exec: {
-            electron: 'npm-run electron .'
+            electron: 'npm-run electron .',
         },
     });
 

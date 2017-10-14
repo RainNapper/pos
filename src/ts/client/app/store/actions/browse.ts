@@ -2,15 +2,15 @@ import { NAVIGATE_TO, NAVIGATE_BACK, INavigateToAction, INavigateBackAction } fr
 import { IRootStoreState } from "client/app/store/reducers/root";
 import { Action, Dispatch } from "redux";
 
-export const navigate = (dispatch: Dispatch<IRootStoreState>) => (target: string): void => {
-  dispatch(buildNavigateAction(target));
+export const navigateTo = (dispatch: Dispatch<IRootStoreState>) => (target: string): void => {
+  dispatch(buildNavigateToAction(target));
 };
 
 export const navigateBack = (dispatch: Dispatch<IRootStoreState>) => (stepsBack: number): void => {
   dispatch(buildNavigateBackAction(stepsBack));
 };
 
-const buildNavigateAction = (target: string): INavigateToAction => {
+const buildNavigateToAction = (target: string): INavigateToAction => {
   return {
     type: NAVIGATE_TO,
     target,

@@ -1,7 +1,8 @@
 var webpack = require('webpack')
+var path = require('path')
 
-const DIST_ROOT = __dirname + "dist/";
-const BUILD_ROOT = DIST_ROOT + "build/";
+const DIST_ROOT = path.join(__dirname, "dist/");
+const BUILD_ROOT = path.join(DIST_ROOT, "build/");
 module.exports = {
   entry: {
     // create two library bundles, one with jQuery and
@@ -23,11 +24,11 @@ module.exports = {
       // The path to the manifest file which maps between
       // modules included in a bundle and the internal IDs
       // within that bundle
-      path: `${DIST_ROOT}vendor-manifest.json`,
+      path: path.join(BUILD_ROOT, 'vendor-manifest.json'),
       // The name of the global variable which the library's
       // require function has been assigned to. This must match the
       // output.library option above
-      name: 'vendor_lib'
+      name: 'vendor_lib',
     }),
   ],
 }

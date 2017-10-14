@@ -1,6 +1,6 @@
 import { getCategoryContents, getCurrentPathTargets } from "app/store/selectors/browse";
 import { IPathContent, ITarget } from "app/ui/models/path_content";
-import { navigate, navigateBack } from "client/app/store/actions/browse";
+import { navigateTo, navigateBack } from "client/app/store/actions/browse";
 import { IRootStoreState } from "client/app/store/reducers/root";
 import * as React from "react";
 import { connect } from "react-redux";
@@ -85,7 +85,7 @@ const mapStateToProps = (state: IRootStoreState): IAppStateProps => {
 
 const mapDispatchToProps = (dispatch): IAppDispatchProps => {
   return {
-    navigate: navigate(dispatch),
+    navigate: navigateTo(dispatch),
     navigateBack: navigateBack(dispatch),
   };
 };

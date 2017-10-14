@@ -4,17 +4,27 @@ const path = require('path');
 // `CheckerPlugin` is optional. Use it if you want async error reporting.
 // We need this plugin to detect a `--watch` mode. It may be removed later
 // after https://github.com/webpack/webpack/issues/3460 will be resolved.
-const { CheckerPlugin } = require('awesome-typescript-loader')
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
-const BUILD_ROOT = __dirname + "/dist/build/";
+const DIST_ROOT = path.join(__dirname, "dist/");
+const BUILD_ROOT = path.join(DIST_ROOT, "build/");
 const EXTERNALS = {
     "react": "react",
     "react-dom": "react-dom",
     "redux": "redux",
     "react-redux": "react-redux",
-}
+};
+const VENDOR_MANIFEST_PATH = path.join(BUILD_ROOT, 'vendor-manifest.json');
 
 module.exports = function (prod) {
+  var vendor_manifest;
+  try {
+    vendor_manifest = require(VENDOR_MANIFEST_PATH);
+  } catch (e) {
+    console.log(`Vendor manfiest not found at ${VENDOR_MANIFEST_PATH}. Did you build vendor bundle?`);
+    return undefined;
+  }
+
   var config = {
     entry: {
       app: "./app/index.tsx",
@@ -60,7 +70,7 @@ module.exports = function (prod) {
       new CheckerPlugin(),
       new webpack.DllReferencePlugin({
         context: ".",
-        manifest: require(`${BUILD_ROOT}vendor-manifest.json`)
+        manifest: vendor_manifest,
       })
     ],
   };
@@ -70,4 +80,4 @@ module.exports = function (prod) {
   }
 
   return config;
-}
+};
