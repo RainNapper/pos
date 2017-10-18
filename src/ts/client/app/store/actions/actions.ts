@@ -6,6 +6,8 @@ export type AppAction =
   | INavigateToAction
   | INavigateBackAction
   | ITableAddItemAction
+  | ISelectTableAction
+  | ITableAddItemAction
   ;
 
 export type NAVIGATE_TO = "POSPOS/BROWSE/NAVIGATE";
@@ -22,10 +24,17 @@ export interface INavigateBackAction extends Action {
   stepsBack: number;
 }
 
-export type TABLE_ADD_ITEM = "POSPOS/TABLE/ADD_ITEM";
-export const TABLE_ADD_ITEM: TABLE_ADD_ITEM = "POSPOS/TABLE/ADD_ITEM";
+export type ADD_ITEM = "POSPOS/TABLE/ADD_ITEM";
+export const ADD_ITEM: ADD_ITEM = "POSPOS/TABLE/ADD_ITEM";
 export interface ITableAddItemAction extends Action {
-  type: TABLE_ADD_ITEM;
+  type: ADD_ITEM;
+}
+
+export type SELECT_TABLE = "POSPOS/SELECT_TABLE";
+export const SELECT_TABLE: SELECT_TABLE = "POSPOS/SELECT_TABLE";
+export interface ISelectTableAction extends Action {
+  type: SELECT_TABLE;
+  selectedTable: string;
 }
 
 export interface INoAction extends Action {

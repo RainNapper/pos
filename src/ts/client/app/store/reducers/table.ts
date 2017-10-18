@@ -1,30 +1,52 @@
-import { AppAction, TABLE_ADD_ITEM } from "client/app/store/actions/actions";
+import { AppAction, SELECT_TABLE } from "client/app/store/actions/actions";
 import { Reducer } from "redux";
-
-interface ITableSelections {
-}
-interface ITable {
-}
+import { ITable, PartyPhase } from "shared/models/table";
 
 export interface ITableStoreState {
+  activeTable?: string;
   tables: Map<string, ITable>;
 }
 
 const DEFAULT_STATE: ITableStoreState = {
-  tables: new Map<string, ITable>(),
+  activeTable: undefined,
+  tables: buildTables(),
 };
 
-export const browseReducer: Reducer<ITableStoreState> = (
+export const tableReducer: Reducer<ITableStoreState> = (
   state: ITableStoreState = DEFAULT_STATE,
   action: AppAction): ITableStoreState => {
   switch (action.type) {
-    case TABLE_ADD_ITEM:
-    
+    case SELECT_TABLE:
       return {
         ...state,
+        activeTable: action.selectedTable,
       };
     default:
       return state;
   }
 };
 
+function buildTables() {
+  return new Map<string, ITable>([
+    ["1", {
+      id: "1",
+      number: 1,
+      seats: 4,
+    }],
+    ["2", {
+      id: "2",
+      number: 2,
+      seats: 4,
+    }],
+    ["3", {
+      id: "3",
+      number: 3,
+      seats: 8,
+    }],
+    ["4", {
+      id: "4",
+      number: 4,
+      seats: 6,
+    }],
+  ]);
+}

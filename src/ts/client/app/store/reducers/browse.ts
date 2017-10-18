@@ -1,14 +1,14 @@
-import { AppAction, NAVIGATE_TO, NAVIGATE_BACK } from "client/app/store/actions/actions";
+import { AppAction, NAVIGATE_BACK, NAVIGATE_TO } from "client/app/store/actions/actions";
 import { Reducer } from "redux";
 
 export interface IBrowseStoreState {
-  selectedId?: string;
   path: string[];
+  selectedId?: string;
 }
 
 const DEFAULT_STATE: IBrowseStoreState = {
-  selectedId: undefined,
   path: ["1"],
+  selectedId: undefined,
 };
 
 export const browseReducer: Reducer<IBrowseStoreState> = (

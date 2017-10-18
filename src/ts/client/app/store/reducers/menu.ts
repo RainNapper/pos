@@ -1,7 +1,9 @@
 import { AppAction } from "client/app/store/actions/actions";
 import { Reducer } from "redux";
-import { IMenu, addSingletonOrderableUnsafe } from "shared/models/menu/menu";
-import { ICategory, IItem, ICustomChoice, ICustomization, IOrderable, IComponent, IChoice } from "shared/models/menu/menu_elements";
+import { addSingletonOrderableUnsafe, IMenu } from "shared/models/menu/menu";
+import {
+   ICategory, IChoice, IComponent, ICustomChoice, ICustomization, IItem, IOrderable,
+} from "shared/models/menu/menu_elements";
 import { IMenuLayout, IMenuTreeNode } from "shared/models/menu/menu_layout";
 
 export type IMenuStoreState = IMenu;
@@ -37,11 +39,11 @@ function buildLayout(): IMenuLayout {
   return {
     rootNodeId: "1",
     vertices: new Map<string, IMenuTreeNode>([
-      ["1", { id: "1", }],
-      ["2", { id: "2", }],
-      ["3", { id: "3", }],
-      ["4", { id: "4", }],
-      ["5", { id: "5", }],
+      ["1", { id: "1" }],
+      ["2", { id: "2" }],
+      ["3", { id: "3" }],
+      ["4", { id: "4" }],
+      ["5", { id: "5" }],
     ]),
     edges: new Map<string, string[]>([
       ["1", ["2", "3"]],

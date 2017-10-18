@@ -35,7 +35,8 @@ export const getCategoryContents = (state: IRootStoreState): IPathContent => {
   // TODO(mansfieldmark): Remove the !, explicitly throw an exception.
   let orderables: ITarget[] = [];
   if (currentNode.orderables !== undefined) {
-    orderables = currentNode.orderables.map((orderableId) => buildTargetFromOrderable(state.menu.orderables.get(orderableId)!));
+    orderables = currentNode.orderables.map(
+      (orderableId) => buildTargetFromOrderable(state.menu.orderables.get(orderableId)!));
   }
 
   return {

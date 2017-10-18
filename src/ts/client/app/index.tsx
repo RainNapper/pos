@@ -1,5 +1,5 @@
 import { IRootStoreState, rootReducer } from "client/app/store/reducers/root";
-import { AppContainer } from "client/app/ui/components/app";
+import App from "client/app/ui/components/app";
 import * as React from "react";
 import { render } from "react-dom";
 import { Provider } from "react-redux";
@@ -10,7 +10,7 @@ const store: Store<IRootStoreState> = createStore<IRootStoreState>(rootReducer);
 
 render(
   <Provider store={store} >
-    <AppContainer />
+    <App />
   </Provider>,
   document.getElementById("root"),
 );
